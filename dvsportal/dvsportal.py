@@ -386,6 +386,31 @@ class DVSPortal:
             json=payload
         )
 
+    async def remove_license_plate(
+        self,
+        license_plate: str,
+        name: str,
+        permit_media_code: str | None = None,
+        type_id: int | None = None
+    ) -> dict:
+        """Remove a stored license plate."""
+        type_id = type_id or self.default_type_id
+        permit_media_code = permit_media_code or self.default_code
+        authorization_header = await self.authorization_header()
+
+        payload = {
+            "permitMediaTypeID": type_id,
+            "permitMediaCode": permit_media_code,
+            "licensePlate": license_plate,
+            "name": name
+        }
+
+        return await self._request(
+            "permitmedialicenseplate/remove",
+            headers=authorization_header,
+            json=payload
+        )
+
     async def close(self) -> None:
         """Close open client session."""
         if self._session and not self._session.closed:

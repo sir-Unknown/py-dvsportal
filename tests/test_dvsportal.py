@@ -244,6 +244,25 @@ async def test_store_license_plate(dvsportal: DVSPortal):
         )
         assert result["Success"]
 
+@pytest.mark.asyncio
+async def test_remove_license_plate(dvsportal: DVSPortal):
+    """Test removing a license plate."""
+    async def mock_request_side_effect(uri: str, method: str = "POST", json=None, headers=None):
+        if method == "GET" and uri == "login":
+            return {"PermitMediaTypes": [{"ID": 1}]}
+        if method == "POST" and uri == "login":
+            return {"Token": "dummy_token"}
+        if method == "POST" and uri == "permitmedialicenseplate/remove":
+            return {"Success": True}
+        return {}
+
+    with patch.object(dvsportal, "_request", side_effect=mock_request_side_effect):
+        result = await dvsportal.remove_license_plate(
+            license_plate="ABC123",
+            name="Car"
+        )
+        assert result["Success"]
+
 
 @pytest.mark.asyncio
 async def test_close_session(dvsportal: DVSPortal):

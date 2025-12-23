@@ -86,6 +86,24 @@ if __name__ == '__main__':
     asyncio.run(add_license_plate())
 ```
 
+To remove a stored license plate:
+
+```python
+import asyncio
+from dvsportal import DVSPortal
+
+async def remove_license_plate():
+    async with DVSPortal(api_host='api.example.com', identifier='your_identifier', password='your_password') as portal:
+        await portal.remove_license_plate(
+            license_plate='ABC123',
+            name='My Car'
+        )
+        print("License plate removed successfully.")
+
+if __name__ == '__main__':
+    asyncio.run(remove_license_plate())
+```
+
 ## Features
 
 - Asynchronous API communication
